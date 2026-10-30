@@ -8,9 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: OreMods
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,16 +19,16 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore --configfile nuget.config
+        run: dotnet restore OreMods.csproj --configfile nuget.config
 
       - name: Build
-        run: dotnet build -c Release --no-restore
+        run: dotnet build OreMods.csproj -c Release --no-restore
 
       - name: Verify scmod
-        run: test -f ../OreMods.scmod
+        run: test -f bin/OreMods.scmod
 
       - name: Upload scmod
         uses: actions/upload-artifact@v4
         with:
           name: OreMods-scmod
-          path: OreMods.scmod
+          path: bin/OreMods.scmod
