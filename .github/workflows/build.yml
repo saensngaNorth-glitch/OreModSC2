@@ -24,11 +24,14 @@ jobs:
       - name: Build
         run: dotnet build OreMods.csproj -c Release --no-restore
 
-      - name: Verify scmod
-        run: test -f bin/OreMods.scmod
+      - name: Find scmod
+        run: |
+          echo "Searching for .scmod files..."
+          find . -type f -name "*.scmod" -print
 
       - name: Upload scmod
         uses: actions/upload-artifact@v4
         with:
           name: OreMods-scmod
-          path: bin/OreMods.scmod
+          path: '**/*.scmod'
+          if-no-files-found: error
