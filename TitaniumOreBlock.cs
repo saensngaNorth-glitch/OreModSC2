@@ -1,11 +1,14 @@
 using Engine;
 using Engine.Graphics;
 
-namespace Game {
-    public class TitaniumOreBlock : CubeBlock {
+namespace Game
+{
+    public class TitaniumOreBlock : CubeBlock
+    {
         public Texture2D m_texture;
 
-        public override void Initialize() {
+        public override void Initialize()
+        {
             base.Initialize();
 
             CanBeBuiltIntoFurniture = true;
@@ -15,11 +18,15 @@ namespace Game {
             );
 
             int contents = BlocksManager.GetBlockIndex<TitaniumOreBlock>();
+
             Log.Information(
                 $"Ore Mods: Titanium Ore loaded (Contents: {contents})."
             );
         }
 
-        public override Texture2D GetDefaultTexture(int value) => m_texture;
+        public override Texture2D GetDefaultTexture(int value)
+        {
+            return m_texture;
+        }
     }
 }
