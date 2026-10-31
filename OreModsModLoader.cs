@@ -408,17 +408,16 @@ namespace Game
             }
 
             sedimentTopY = y;
-
-            while (
-                y >= 0
-                && IsLooseSediment(
-                    chunk.GetCellContentsFast(
-                        localX,
-                        y,
-                        localZ
-                    )
-                )
-            {
+while (
+    y >= 0
+    && IsLooseSediment(
+        chunk.GetCellContentsFast(
+            localX,
+            y,
+            localZ
+        )
+    )
+)            {
                 sedimentThickness++;
                 y--;
             }
