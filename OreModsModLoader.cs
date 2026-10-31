@@ -41,7 +41,8 @@ namespace Game {
 
             bool addedStep = false;
 
-            if (!generator.ChunkGenerationStep3.Exists(step => step.Name == "OreMods_Titanium_HardRock")) {
+            if (!generator.ChunkGenerationStep3.Exists(
+                step => step.Name == "OreMods_Titanium_HardRock")) {
                 generator.ChunkGenerationStep3.Add(
                     new ChunkGenerationStep(
                         350,
@@ -52,7 +53,8 @@ namespace Game {
                 addedStep = true;
             }
 
-            if (!generator.ChunkGenerationStep3.Exists(step => step.Name == "OreMods_Titanium_CaveExposure")) {
+            if (!generator.ChunkGenerationStep3.Exists(
+                step => step.Name == "OreMods_Titanium_CaveExposure")) {
                 generator.ChunkGenerationStep3.Add(
                     new ChunkGenerationStep(
                         360,
@@ -63,7 +65,8 @@ namespace Game {
                 addedStep = true;
             }
 
-            if (!generator.ChunkGenerationStep3.Exists(step => step.Name == "OreMods_Titanium_Placer")) {
+            if (!generator.ChunkGenerationStep3.Exists(
+                step => step.Name == "OreMods_Titanium_Placer")) {
                 generator.ChunkGenerationStep3.Add(
                     new ChunkGenerationStep(
                         600,
@@ -113,28 +116,66 @@ namespace Game {
                         )
                     );
 
-                    float mountainInfluence = MathUtils.Saturate((mountainFactor - 0.80f) / 0.20f);
-                    float veinChance = 0.035f + 0.20f * mountainInfluence;
+                    float mountainInfluence =
+                        MathUtils.Saturate(
+                            (mountainFactor - 0.80f) / 0.20f
+                        );
+
+                    float veinChance =
+                        0.035f + 0.20f * mountainInfluence;
 
                     if (!random.Bool(veinChance)) {
                         continue;
                     }
 
                     int veinCount = 1;
-                    if (mountainInfluence > 0.75f && random.Bool(0.12f)) {
+
+                    if (
+                        mountainInfluence > 0.75f
+                        && random.Bool(0.12f)) {
                         veinCount = 2;
                     }
 
                     for (int i = 0; i < veinCount; i++) {
-                        int oreX = sourceChunkX * TerrainChunk.Size + random.Int(0, TerrainChunk.Size - 1);
+                        int oreX =
+                            sourceChunkX * TerrainChunk.Size
+                            + random.Int(0, TerrainChunk.Size - 1);
+
                         int oreY = random.Int(18, 110);
-                        int oreZ = sourceChunkZ * TerrainChunk.Size + random.Int(0, TerrainChunk.Size - 1);
 
-                        TerrainBrush vein = CreateHardRockVeinBrush(random, m_titaniumOreIndex);
+                        int oreZ =
+                            sourceChunkZ * TerrainChunk.Size
+                            + random.Int(0, TerrainChunk.Size - 1);
 
-                        vein.PaintFastSelective(chunk, oreX, oreY, oreZ, GraniteContents);
-                        vein.PaintFastSelective(chunk, oreX, oreY, oreZ, LimestoneContents);
-                        vein.PaintFastSelective(chunk, oreX, oreY, oreZ, BasaltContents);
+                        TerrainBrush vein =
+                            CreateHardRockVeinBrush(
+                                random,
+                                m_titaniumOreIndex
+                            );
+
+                        vein.PaintFastSelective(
+                            chunk,
+                            oreX,
+                            oreY,
+                            oreZ,
+                            GraniteContents
+                        );
+
+                        vein.PaintFastSelective(
+                            chunk,
+                            oreX,
+                            oreY,
+                            oreZ,
+                            LimestoneContents
+                        );
+
+                        vein.PaintFastSelective(
+                            chunk,
+                            oreX,
+                            oreY,
+                            oreZ,
+                            BasaltContents
+                        );
                     }
                 }
             }
@@ -159,17 +200,30 @@ namespace Game {
             int attempts = random.Int(8, 15);
 
             for (int attempt = 0; attempt < attempts; attempt++) {
-                int localX = random.Int(2, TerrainChunk.Size - 3);
-                int localZ = random.Int(2, TerrainChunk.Size - 3);
+                int localX =
+                    random.Int(2, TerrainChunk.Size - 3);
+
+                int localZ =
+                    random.Int(2, TerrainChunk.Size - 3);
+
                 int y = random.Int(12, 105);
 
-                int contents = chunk.GetCellContentsFast(localX, y, localZ);
+                int contents =
+                    chunk.GetCellContentsFast(
+                        localX,
+                        y,
+                        localZ
+                    );
 
                 if (!IsHardRock(contents)) {
                     continue;
                 }
 
-                if (!HasAdjacentAir(chunk, localX, y, localZ)) {
+                if (!HasAdjacentAir(
+                    chunk,
+                    localX,
+                    y,
+                    localZ)) {
                     continue;
                 }
 
@@ -177,13 +231,17 @@ namespace Game {
                     continue;
                 }
 
-                int worldX = chunk.Origin.X + localX;
-                int worldZ = chunk.Origin.Y + localZ;
+                int worldX =
+                    chunk.Origin.X + localX;
 
-                TerrainBrush vein = CreateHardRockVeinBrush(
-                    random,
-                    m_titaniumOreIndex
-                );
+                int worldZ =
+                    chunk.Origin.Y + localZ;
+
+                TerrainBrush vein =
+                    CreateHardRockVeinBrush(
+                        random,
+                        m_titaniumOreIndex
+                    );
 
                 vein.PaintFastSelective(
                     chunk,
@@ -218,16 +276,47 @@ namespace Game {
             int x,
             int y,
             int z) {
-            return chunk.GetCellContentsFast(x - 1, y, z) == AirContents
-                || chunk.GetCellContentsFast(x + 1, y, z) == AirContents
-                || chunk.GetCellContentsFast(x, y - 1, z) == AirContents
-                || chunk.GetCellContentsFast(x, y + 1, z) == AirContents
-                || chunk.GetCellContentsFast(x, y, z - 1) == AirContents
-                || chunk.GetCellContentsFast(x, y, z + 1) == AirContents;
+            return
+                chunk.GetCellContentsFast(
+                    x - 1,
+                    y,
+                    z
+                ) == AirContents
+                ||
+                chunk.GetCellContentsFast(
+                    x + 1,
+                    y,
+                    z
+                ) == AirContents
+                ||
+                chunk.GetCellContentsFast(
+                    x,
+                    y - 1,
+                    z
+                ) == AirContents
+                ||
+                chunk.GetCellContentsFast(
+                    x,
+                    y + 1,
+                    z
+                ) == AirContents
+                ||
+                chunk.GetCellContentsFast(
+                    x,
+                    y,
+                    z - 1
+                ) == AirContents
+                ||
+                chunk.GetCellContentsFast(
+                    x,
+                    y,
+                    z + 1
+                ) == AirContents;
         }
 
         private static bool IsHardRock(int contents) {
-            return contents == GraniteContents
+            return
+                contents == GraniteContents
                 || contents == LimestoneContents
                 || contents == BasaltContents;
         }
@@ -269,8 +358,11 @@ namespace Game {
                     continue;
                 }
 
-                int worldX = chunk.Origin.X + localX;
-                int worldZ = chunk.Origin.Y + localZ;
+                int worldX =
+                    chunk.Origin.X + localX;
+
+                int worldZ =
+                    chunk.Origin.Y + localZ;
 
                 float shoreDistance =
                     generator.CalculateOceanShoreDistance(
@@ -283,7 +375,8 @@ namespace Game {
                     && shoreDistance <= PlacerShoreMaxDistance;
 
                 bool shallowWaterSite =
-                    waterDepth > 0 && waterDepth <= 6;
+                    waterDepth > 0
+                    && waterDepth <= 6;
 
                 bool fluvialSite =
                     !coastalSite
@@ -295,7 +388,8 @@ namespace Game {
                         sedimentTopY
                     );
 
-                if (!coastalSite
+                if (
+                    !coastalSite
                     && !shallowWaterSite
                     && !fluvialSite) {
                     continue;
@@ -305,7 +399,8 @@ namespace Game {
                     continue;
                 }
 
-                int maxBurialDepth = sedimentThickness - 1;
+                int maxBurialDepth =
+                    sedimentThickness - 1;
 
                 if (maxBurialDepth > 3) {
                     maxBurialDepth = 3;
@@ -317,7 +412,10 @@ namespace Game {
 
                 int oreY =
                     sedimentTopY
-                    - random.Int(1, maxBurialDepth);
+                    - random.Int(
+                        1,
+                        maxBurialDepth
+                    );
 
                 TerrainBrush patch =
                     CreatePlacerPatch(
@@ -428,15 +526,19 @@ namespace Game {
                         continue;
                     }
 
-                    int minY = sedimentTopY - 5;
-                    int maxY = sedimentTopY + 5;
+                    int minY =
+                        sedimentTopY - 5;
+
+                    int maxY =
+                        sedimentTopY + 5;
 
                     if (minY < 0) {
                         minY = 0;
                     }
 
                     if (maxY >= TerrainChunk.Height) {
-                        maxY = TerrainChunk.Height - 1;
+                        maxY =
+                            TerrainChunk.Height - 1;
                     }
 
                     for (int y = minY; y <= maxY; y++) {
@@ -455,18 +557,25 @@ namespace Game {
             return false;
         }
 
-        private static bool IsLooseSediment(int contents) =>
+        private static bool IsLooseSediment(
+            int contents) =>
             contents == SandBlock.Index
             || contents == GravelBlock.Index;
 
         private static TerrainBrush CreateHardRockVeinBrush(
             Random random,
             int contents) {
-            TerrainBrush brush = new TerrainBrush();
+            TerrainBrush brush =
+                new TerrainBrush();
 
-            int endX = random.Int(-4, 4);
-            int endY = random.Int(-2, 2);
-            int endZ = random.Int(-4, 4);
+            int endX =
+                random.Int(-4, 4);
+
+            int endY =
+                random.Int(-2, 2);
+
+            int endZ =
+                random.Int(-4, 4);
 
             if (
                 endX == 0
@@ -489,9 +598,14 @@ namespace Game {
             );
 
             if (random.Bool(0.60f)) {
-                int branchStartX = endX / 2;
-                int branchStartY = endY / 2;
-                int branchStartZ = endZ / 2;
+                int branchStartX =
+                    endX / 2;
+
+                int branchStartY =
+                    endY / 2;
+
+                int branchStartZ =
+                    endZ / 2;
 
                 int branchEndX =
                     branchStartX
@@ -526,7 +640,8 @@ namespace Game {
                 );
             }
 
-            int extraCells = random.Int(1, 4);
+            int extraCells =
+                random.Int(1, 4);
 
             for (int i = 0; i < extraCells; i++) {
                 brush.AddCell(
@@ -545,7 +660,8 @@ namespace Game {
         private static TerrainBrush CreatePlacerPatch(
             Random random,
             int contents) {
-            TerrainBrush brush = new TerrainBrush();
+            TerrainBrush brush =
+                new TerrainBrush();
 
             brush.AddCell(
                 0,
@@ -554,8 +670,11 @@ namespace Game {
                 contents
             );
 
-            int radiusX = random.Int(1, 2);
-            int radiusZ = random.Int(1, 2);
+            int radiusX =
+                random.Int(1, 2);
+
+            int radiusZ =
+                random.Int(1, 2);
 
             for (
                 int dx = -radiusX;
@@ -563,8 +682,7 @@ namespace Game {
                 dx++) {
                 for (
                     int dz = -radiusZ;
-                    dz <= radiusZ;
-                    dz++) {
+                    dz <= radiusZ;                    dz++) {
 
                     if (random.Bool(0.52f)) {
                         brush.AddCell(
@@ -603,494 +721,5 @@ namespace Game {
                 + salt
             );
     }
-}nChunk.Size / 2,
-                        chunk.Origin.Y + TerrainChunk.Size / 2
-                    )
-                );
-
-            float mountainInfluence =
-                MathUtils.Saturate(
-                    (mountainFactor - 0.70f) / 0.30f
-                );
-
-            // Cave exposure is intentionally uncommon.
-            // Mountain regions get a stronger chance.
-            float exposureChance =
-                0.035f + 0.09f * mountainInfluence;
-
-            if (!random.Bool(exposureChance))
-            {
-                return;
-            }
-
-            int attempts = random.Int(8, 14);
-
-            for (int attempt = 0; attempt < attempts; attempt++)
-            {
-                int x = random.Int(2, TerrainChunk.Size - 3);
-                int y = random.Int(12, 105);
-                int z = random.Int(2, TerrainChunk.Size - 3);
-
-                int current =
-                    chunk.GetCellContentsFast(x, y, z);
-
-                if (!IsHardRock(current))
-                {
-                    continue;
-                }
-
-                if (!IsExposedToCave(
-                    chunk,
-                    x,
-                    y,
-                    z))
-                {
-                    continue;
-                }
-
-                TerrainBrush vein =
-                    CreateHardRockVeinBrush(
-                        random,
-                        m_titaniumOreIndex
-                    );
-
-                // Paint only the actual host-rock types.
-                vein.PaintFastSelective(
-                    chunk,
-                    x,
-                    y,
-                    z,
-                    BasaltContents
-                );
-
-                vein.PaintFastSelective(
-                    chunk,
-                    x,
-                    y,
-                    z,
-                    GraniteContents
-                );
-
-                vein.PaintFastSelective(
-                    chunk,
-                    x,
-                    y,
-                    z,
-                    LimestoneContents
-                );
-
-                // One cave-exposed deposit per generated chunk
-                // is enough for a rare geological occurrence.
-                return;
-            }
-        }
-
-        private static bool IsExposedToCave(
-            TerrainChunk chunk,
-            int x,
-            int y,
-            int z)
-        {
-            return
-                chunk.GetCellContentsFast(x - 1, y, z)
-                    == AirContents
-                ||
-                chunk.GetCellContentsFast(x + 1, y, z)
-                    == AirContents
-                ||
-                chunk.GetCellContentsFast(x, y - 1, z)
-                    == AirContents
-                ||
-                chunk.GetCellContentsFast(x, y + 1, z)
-                    == AirContents
-                ||
-                chunk.GetCellContentsFast(x, y, z - 1)
-                    == AirContents
-                ||
-                chunk.GetCellContentsFast(x, y, z + 1)
-                    == AirContents;
-        }
-
-        private static bool IsHardRock(int contents)
-        {
-            return
-                contents == BasaltContents
-                ||
-                contents == GraniteContents
-                ||
-                contents == LimestoneContents;
-        }
-
-        // ============================================================
-        // PLACER TITANIUM
-        // ============================================================
-
-        private static void GenerateTitaniumPlacers(
-            TerrainChunk chunk,
-            TerrainContentsGenerator24 generator)
-        {
-            if (m_titaniumOreIndex < 0 ||
-                !generator.TGCavesAndPockets)
-            {
-                return;
-            }
-
-            Random random = new Random(
-                CreateChunkSeed(
-                    generator.m_seed,
-                    chunk.Coords.X,
-                    chunk.Coords.Y,
-                    0x2468AC
-                )
-            );
-
-            int attempts = random.Int(5, 9);
-
-            for (int attempt = 0; attempt < attempts; attempt++)
-            {
-                int localX = random.Int(3, 12);
-                int localZ = random.Int(3, 12);
-
-                int sedimentTopY;
-                int sedimentThickness;
-                int waterDepth;
-
-                if (!TryFindSurfaceSediment(
-                    chunk,
-                    localX,
-                    localZ,
-                    out sedimentTopY,
-                    out sedimentThickness,
-                    out waterDepth))
-                {
-                    continue;
-                }
-
-                int worldX =
-                    chunk.Origin.X + localX;
-
-                int worldZ =
-                    chunk.Origin.Y + localZ;
-
-                float shoreDistance =
-                    generator.CalculateOceanShoreDistance(
-                        worldX,
-                        worldZ
-                    );
-
-                bool coastalSite =
-                    shoreDistance >= PlacerShoreMinDistance
-                    &&
-                    shoreDistance <= PlacerShoreMaxDistance;
-
-                bool shallowWaterSite =
-                    waterDepth > 0 &&
-                    waterDepth <= 6;
-
-                bool fluvialSite =
-                    !coastalSite
-                    &&
-                    !shallowWaterSite
-                    &&
-                    IsNearSurfaceWater(
-                        chunk,
-                        localX,
-                        localZ,
-                        sedimentTopY
-                    );
-
-                if (!coastalSite &&
-                    !shallowWaterSite &&
-                    !fluvialSite)
-                {
-                    continue;
-                }
-
-                // Heavy-mineral concentrations remain patchy.
-                if (!random.Bool(0.18f))
-                {
-                    continue;
-                }
-
-                int maxBurialDepth =
-                    sedimentThickness - 1;
-
-                if (maxBurialDepth > 3)
-                {
-                    maxBurialDepth = 3;
-                }
-
-                if (maxBurialDepth < 1)
-                {
-                    continue;
-                }
-
-                // Keep at least one sediment layer above the deposit.
-                int oreY =
-                    sedimentTopY
-                    - random.Int(
-                        1,
-                        maxBurialDepth
-                    );
-
-                TerrainBrush patch =
-                    CreatePlacerPatch(
-                        random,
-                        m_titaniumOreIndex
-                    );
-
-                patch.PaintFastSelective(
-                    chunk,
-                    worldX,
-                    oreY,
-                    worldZ,
-                    SandBlock.Index
-                );
-
-                patch.PaintFastSelective(
-                    chunk,
-                    worldX,
-                    oreY,
-                    worldZ,
-                    GravelBlock.Index
-                );
-            }
-        }
-
-        // ============================================================
-        // SEDIMENT DETECTION
-        // ============================================================
-
-        private static bool TryFindSurfaceSediment(
-            TerrainChunk chunk,
-            int localX,
-            int localZ,
-            out int sedimentTopY,
-            out int sedimentThickness,
-            out int waterDepth)
-        {
-            sedimentTopY = -1;
-            sedimentThickness = 0;
-            waterDepth = 0;
-
-            int y =
-                chunk.CalculateTopmostCellHeight(
-                    localX,
-                    localZ
-                );
-
-            while (
-                y > 0
-                &&
-                chunk.GetCellContentsFast(
-                    localX,
-                    y,
-                    localZ
-                ) == WaterBlock.Index)
-            {
-                waterDepth++;
-                y--;
-            }
-
-            if (waterDepth > PlacerWaterDepthLimit ||
-                y <= 0)
-            {
-                return false;
-            }
-
-            int contents =
-                chunk.GetCellContentsFast(
-                    localX,
-                    y,
-                    localZ
-                );
-
-            if (!IsLooseSediment(contents))
-            {
-                return false;
-            }
-
-            sedimentTopY = y;
-
-            while (
-                y >= 0
-                &&
-                IsLooseSediment(
-                    chunk.GetCellContentsFast(
-                        localX,
-                        y,
-                        localZ
-                    )
-                )
-            )
-            {
-                sedimentThickness++;
-                y--;
-            }
-
-            return sedimentThickness >= 2;
-        }
-
-        private static bool IsNearSurfaceWater(
-            TerrainChunk chunk,
-            int localX,
-            int localZ,
-            int sedimentTopY)
-        {
-            for (int dx = -3; dx <= 3; dx++)
-            {
-                for (int dz = -3; dz <= 3; dz++)
-                {
-                    if (dx == 0 && dz == 0)
-                    {
-                        continue;
-                    }
-
-                    int x = localX + dx;
-                    int z = localZ + dz;
-
-                    if (x < 0 ||
-                        x >= TerrainChunk.Size ||
-                        z < 0 ||
-                        z >= TerrainChunk.Size)
-                    {
-                        continue;
-                    }
-
-                    int minY =
-                        sedimentTopY - 5;
-
-                    int maxY =
-                        sedimentTopY + 5;
-
-                    if (minY < 0)
-                    {
-                        minY = 0;
-                  }
-
-        private static bool IsNearSurfaceWater(
-            TerrainChunk chunk,
-            int localX,
-            int localZ,
-            int sedimentTopY) {
-            for (int dx = -3; dx <= 3; dx++) {
-                for (int dz = -3; dz <= 3; dz++) {
-                    if (dx == 0 && dz == 0) {
-                        continue;
-                    }
-
-                    int x = localX + dx;
-                    int z = localZ + dz;
-                    if (x < 0 || x >= TerrainChunk.Size || z < 0 || z >= TerrainChunk.Size) {
-                        continue;
-                    }
-
-                    int minY = sedimentTopY - 5;
-                    int maxY = sedimentTopY + 5;
-                    if (minY < 0) {
-                        minY = 0;
-                    }
-                    if (maxY >= TerrainChunk.Height) {
-                        maxY = TerrainChunk.Height - 1;
-                    }
-
-                    // Inspect only a narrow band around the sediment elevation.
-                    // This avoids a full 256-block column scan for every candidate point.
-                    for (int y = minY; y <= maxY; y++) {
-                        if (chunk.GetCellContentsFast(x, y, z) == WaterBlock.Index) {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private static bool IsLooseSediment(int contents) =>
-            contents == SandBlock.Index || contents == GravelBlock.Index;
-
-        private static TerrainBrush CreateHardRockVeinBrush(Random random, int contents) {
-            TerrainBrush brush = new TerrainBrush();
-
-            int endX = random.Int(-4, 4);
-            int endY = random.Int(-2, 2);
-            int endZ = random.Int(-4, 4);
-            if (endX == 0 && endY == 0 && endZ == 0) {
-                endX = 3;
-            }
-
-            // Main narrow, irregular vein.
-            brush.AddRay(0, 0, 0, endX, endY, endZ, 1, 1, 1, contents);
-
-            // A short branch gives the deposit a natural lens-like outline.
-            if (random.Bool(0.60f)) {
-                int branchStartX = endX / 2;
-                int branchStartY = endY / 2;
-                int branchStartZ = endZ / 2;
-                int branchEndX = branchStartX + random.Int(-2, 2);
-                int branchEndY = branchStartY + random.Int(-1, 1);
-                int branchEndZ = branchStartZ + random.Int(-2, 2);
-
-                if (branchStartX == branchEndX
-                    && branchStartY == branchEndY
-                    && branchStartZ == branchEndZ) {
-                    branchEndZ++;
-                }
-
-                brush.AddRay(
-                    branchStartX,
-                    branchStartY,
-                    branchStartZ,
-                    branchEndX,
-                    branchEndY,
-                    branchEndZ,
-                    1,
-                    1,
-                    1,
-                    contents
-                );
-            }
-
-            // Small side pockets break up the straight-line appearance.
-            int extraCells = random.Int(1, 4);
-            for (int i = 0; i < extraCells; i++) {
-                brush.AddCell(
-                    random.Int(-2, 2),
-                    random.Int(-1, 1),
-                    random.Int(-2, 2),
-                    contents
-                );
-            }
-
-            brush.Compile();
-            return brush;
-        }
-
-        private static TerrainBrush CreatePlacerPatch(Random random, int contents) {
-            TerrainBrush brush = new TerrainBrush();
-            brush.AddCell(0, 0, 0, contents);
-
-            int radiusX = random.Int(1, 2);
-            int radiusZ = random.Int(1, 2);
-
-            for (int dx = -radiusX; dx <= radiusX; dx++) {
-                for (int dz = -radiusZ; dz <= radiusZ; dz++) {
-                    if (random.Bool(0.52f)) {
-                        brush.AddCell(dx, 0, dz, contents);
-                    }
-
-                    if (random.Bool(0.14f)) {
-                        brush.AddCell(dx, -1, dz, contents);
-                    }
-                }
-            }
-
-            brush.Compile();
-            return brush;
-        }
-
-        private static int CreateChunkSeed(int worldSeed, int chunkX, int chunkZ, int salt) =>
-            unchecked(worldSeed + chunkX * 73428767 + chunkZ * 912931 + salt);
-    }
 }
+            
