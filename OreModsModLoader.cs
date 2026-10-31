@@ -21,10 +21,7 @@ namespace Game
         public override void BlocksInitalized()
         {
             m_titaniumOreIndex = BlocksManager.GetBlockIndex<TitaniumOreBlock>(true);
-
-            Log.Information(
-                $"Ore Mods: Titanium Ore registered for geological world generation (Contents: {m_titaniumOreIndex})."
-            );
+            Log.Information($"Ore Mods: Titanium Ore registered (Contents: {m_titaniumOreIndex}).");
         }
 
         public override void TerrainContentsGenerator24Initialize(
@@ -36,7 +33,6 @@ namespace Game
 
             bool addedStep = false;
 
-            // [แก้ไข] เปลี่ยน Order เป็น 450 เพื่อให้เจนหลังสุด
             if (!generator.ChunkGenerationStep3.Exists(step => step.Name == "OreMods_Titanium_HardRock"))
             {
                 generator.ChunkGenerationStep3.Add(
@@ -64,7 +60,6 @@ namespace Game
             if (addedStep)
             {
                 generator.ChunkGenerationStep3.Sort((a, b) => a.GenerateOrder.CompareTo(b.GenerateOrder));
-                Log.Information("Ore Mods: Titanium geological generation registered.");
             }
         }
 
@@ -75,10 +70,7 @@ namespace Game
             int chunkX = chunk.Coords.X;
             int chunkZ = chunk.Coords.Y;
 
-            // [แก้ไข] ลบ Loop 3x3 ออก ใช้แค่ Chunk ปัจจุบัน
-            Random random = new Random(
-                CreateChunkSeed(generator.m_seed, chunkX, chunkZ, 0x13579B)
-            );
+            Random random = new Random(CreateChunkSeed(generator.m_seed, chunkX, chunkZ, 0x13579B));
 
             GenerateTitaniumIronZone(chunk, chunkX, chunkZ, random);
             GenerateTitaniumCoalZone(chunk, chunkX, chunkZ, random);
@@ -86,25 +78,22 @@ namespace Game
 
         private static void GenerateTitaniumIronZone(TerrainChunk chunk, int sourceChunkX, int sourceChunkZ, Random random)
         {
-            // [แก้ไข] เปลี่ยนโอกาสเกิดเป็น 100% (1.0f) เพื่อทดสอบ
+            // [ทดสอบ] บังคับเกิด 100%
             if (!random.Bool(1.0f)) return;
 
             int oreX = sourceChunkX * TerrainChunk.Size + random.Int(0, TerrainChunk.Size - 1);
-            
-            // [แก้ไข] เปลี่ยน Y เป็น 10-20 เพื่อให้ขุดหาง่ายๆ
-            int oreY = random.Int(10, 20); 
-            
+            int oreY = random.Int(2, 40); 
             int oreZ = sourceChunkZ * TerrainChunk.Size + random.Int(0, TerrainChunk.Size - 1);
 
             TerrainBrush vein = CreateHardRockVeinBrush(random, m_titaniumOreIndex);
 
-            // [แก้ไข] เปลี่ยนหินแม่เป็น StoneBlock ชั่วคราวเพื่อทดสอบ
-            vein.PaintFastSelective(chunk, oreX, oreY, oreZ, GraniteBlock.Index);
+            // [ทดสอบ] เกิดบนหินดำ Basalt
+            vein.PaintFastSelective(chunk, oreX, oreY, oreZ, BasaltBlock.Index);
         }
 
         private static void GenerateTitaniumCoalZone(TerrainChunk chunk, int sourceChunkX, int sourceChunkZ, Random random)
         {
-            // [แก้ไข] เปลี่ยนโอกาสเกิดเป็น 100% (1.0f) เพื่อทดสอบ
+            // [ทดสอบ] บังคับเกิด 100%
             if (!random.Bool(1.0f)) return;
 
             int oreX = sourceChunkX * TerrainChunk.Size + random.Int(0, TerrainChunk.Size - 1);
@@ -113,7 +102,7 @@ namespace Game
 
             TerrainBrush vein = CreateHardRockVeinBrush(random, m_titaniumOreIndex);
 
-            // [แก้ไข] เปลี่ยนหินแม่เป็น StoneBlock ชั่วคราวเพื่อทดสอบ
+            // [ทดสอบ] เกิดบนหินชมพู Granite
             vein.PaintFastSelective(chunk, oreX, oreY, oreZ, GraniteBlock.Index);
         }
 
@@ -121,11 +110,10 @@ namespace Game
         {
             if (m_titaniumOreIndex < 0 || !generator.TGCavesAndPockets) return;
 
-            Random random = new Random(
-                CreateChunkSeed(generator.m_seed, chunk.Coords.X, chunk.Coords.Y, 0x2468AC)
-            );
+            Random random = new Random(CreateChunkSeed(generator.m_seed, chunk.Coords.X, chunk.Coords.Y, 0x2468AC));
 
-            int attempts = random.Int(5, 9);
+            // [ทดสอบ] บังคับให้มี 3 รอยแยกต่อ Chunk
+            int attempts = 3;
 
             for (int attempt = 0; attempt < attempts; attempt++)
             {
@@ -152,7 +140,8 @@ namespace Game
 
                 if (!coastalSite && !shallowWaterSite && !fluvialSite) continue;
 
-                if (!random.Bool(0.18f)) continue;
+                // [ทดสอบ] โอกาสเกิด 100%
+                if (!random.Bool(1.0f)) continue;
 
                 int maxBurialDepth = sedimentThickness - 1;
                 if (maxBurialDepth > 3) maxBurialDepth = 3;
@@ -235,15 +224,15 @@ namespace Game
         {
             TerrainBrush brush = new TerrainBrush();
 
-            int endX = random.Int(-4, 4);
+            int endX = random.Int(-3, 3); 
             int endY = random.Int(-2, 2);
-            int endZ = random.Int(-4, 4);
+            int endZ = random.Int(-3, 3);
 
-            if (endX == 0 && endY == 0 && endZ == 0) endX = 3;
+            if (endX == 0 && endY == 0 && endZ == 0) endX = 2;
 
             brush.AddRay(0, 0, 0, endX, endY, endZ, 1, 1, 1, contents);
 
-            if (random.Bool(0.60f))
+            if (random.Bool(0.40f)) 
             {
                 int branchStartX = endX / 2;
                 int branchStartY = endY / 2;
@@ -261,7 +250,7 @@ namespace Game
                 brush.AddRay(branchStartX, branchStartY, branchStartZ, branchEndX, branchEndY, branchEndZ, 1, 1, 1, contents);
             }
 
-            int extraCells = random.Int(1, 4);
+            int extraCells = random.Int(0, 2); 
             for (int i = 0; i < extraCells; i++)
             {
                 brush.AddCell(random.Int(-2, 2), random.Int(-1, 1), random.Int(-2, 2), contents);
@@ -277,21 +266,16 @@ namespace Game
 
             brush.AddCell(0, 0, 0, contents);
 
-            int radiusX = random.Int(1, 2);
-            int radiusZ = random.Int(1, 2);
+            int radiusX = 1;
+            int radiusZ = 1;
 
             for (int dx = -radiusX; dx <= radiusX; dx++)
             {
                 for (int dz = -radiusZ; dz <= radiusZ; dz++)
                 {
-                    if (random.Bool(0.52f))
+                    if (random.Bool(0.40f))
                     {
                         brush.AddCell(dx, 0, dz, contents);
-                    }
-
-                    if (random.Bool(0.14f))
-                    {
-                        brush.AddCell(dx, -1, dz, contents);
                     }
                 }
             }
