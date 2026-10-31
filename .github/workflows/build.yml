@@ -28,11 +28,15 @@ jobs:
         run: |
           echo "Searching for generated .scmod..."
           find . -type f -name "*.scmod" -print
-          test -f bin/OreMods.scmod
+
+          echo "Checking expected output..."
+          test -f bin/Release/OreMods.scmod
+
+          echo "OreMods.scmod verified successfully."
 
       - name: Upload scmod
         uses: actions/upload-artifact@v4
         with:
           name: OreMods-scmod
-          path: bin/OreMods.scmod
+          path: bin/Release/OreMods.scmod
           if-no-files-found: error
