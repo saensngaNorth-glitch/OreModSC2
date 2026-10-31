@@ -99,7 +99,7 @@ namespace Game
             TerrainBrush vein = CreateHardRockVeinBrush(random, m_titaniumOreIndex);
 
             // [แก้ไข] เปลี่ยนหินแม่เป็น StoneBlock ชั่วคราวเพื่อทดสอบ
-            vein.PaintFastSelective(chunk, oreX, oreY, oreZ, StoneBlock.Index);
+            vein.PaintFastSelective(chunk, oreX, oreY, oreZ, GraniteBlock.Index);
         }
 
         private static void GenerateTitaniumCoalZone(TerrainChunk chunk, int sourceChunkX, int sourceChunkZ, Random random)
@@ -114,7 +114,7 @@ namespace Game
             TerrainBrush vein = CreateHardRockVeinBrush(random, m_titaniumOreIndex);
 
             // [แก้ไข] เปลี่ยนหินแม่เป็น StoneBlock ชั่วคราวเพื่อทดสอบ
-            vein.PaintFastSelective(chunk, oreX, oreY, oreZ, StoneBlock.Index);
+            vein.PaintFastSelective(chunk, oreX, oreY, oreZ, GraniteBlock.Index);
         }
 
         private static void GenerateTitaniumPlacers(TerrainChunk chunk, TerrainContentsGenerator24 generator)
