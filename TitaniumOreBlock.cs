@@ -1,14 +1,11 @@
 using Engine;
 using Engine.Graphics;
 
-namespace Game
-{
-    public class TitaniumOreBlock : CubeBlock
-    {
-        private Texture2D m_texture;
+namespace Game {
+    public class TitaniumOreBlock : CubeBlock {
+        public Texture2D m_texture;
 
-        public override void Initialize()
-        {
+        public override void Initialize() {
             base.Initialize();
 
             CanBeBuiltIntoFurniture = true;
@@ -25,18 +22,15 @@ namespace Game
             );
         }
 
-        public override int GetTextureSlotCount(int value)
-        {
-            return 1;
-        }
-
-        public override int GetFaceTextureSlot(int face, int value)
-        {
+        public override int GetFaceTextureSlot(int face, int value) {
             return 0;
         }
 
-        public override Texture2D GetDefaultTexture(int value)
-        {
+        public override int GetTextureSlotCount(int value) {
+            return 1;
+        }
+
+        public override Texture2D GetDefaultTexture(int value) {
             return m_texture;
         }
     }

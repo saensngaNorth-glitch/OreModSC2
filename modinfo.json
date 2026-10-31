@@ -1,9 +1,9 @@
 {
   "$schema": "https://gitee.com/SC-SPM/SurvivalcraftApi/raw/SCAPI1.9/Survivalcraft/Content/modinfo-scheme.json",
   "Name": "Ore Mods",
-  "Version": "0.1.0",
+  "Version": "0.2.0",
   "ApiVersion": "1.9.5.1",
-  "Description": "Ore expansion mod for Survivalcraft 2. First ore: Titanium.",
+  "Description": "Geology-based titanium ore generation: mafic host-rock deposits and coastal/fluvial heavy-mineral placer patches.",
   "ScVersion": "2.4.0.0",
   "LoadOrder": 10000,
   "NonPersistentMod": false,
